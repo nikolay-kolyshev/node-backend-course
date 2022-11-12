@@ -1,45 +1,24 @@
+//const fs = require('fs');
 const http = require('http');
 
-const PORT = 3003;
+const PORT = 5555;
 
-const getPageTitleByRouteName = (routeName) => {
-    return `<h1>${routeName}</h1>`
-}
-
-let requestCount = 0;
-
-const server = http.createServer((request, response) => {
-    console.log(`Server listening on port ${PORT}`);
-
-    response.write(`
-        <!DOCTYPE html>
-            <head>
-                <title>Backend course</title>
-                <meta charset="utf-8">
-                <link rel="" href="https://e7.pngegg.com/pngimages/306/649/png-clipart-smiley-emoticon-computer-icons-cool-miscellaneous-smiley.png" type="image/png" />
-            </head>
-            <body>
-    `);
-
-    switch (request.url) {
-        case '/':
-        case '/courses':
-            response.write(getPageTitleByRouteName('Courses'));
+const server = http.createServer((req, res) => {
+    console.log(req);
+    switch (req.url) {
+        case '/home': {
+            const data = 'best online course';
+            res.write(data);
+            res.end();
             break;
-        case '/students':
-            response.write(getPageTitleByRouteName('Students'));
-            break;
-        default:
-            response.write(getPageTitleByRouteName('Not found'));
+        }
+        default: {
+            res.write('404 not found');
+            res.end();
+        }
     }
-
-    if (!request.url.endsWith('.ico')) {
-        ++requestCount;
-    }
-
-    response.write(`<div>requestCount <b>${requestCount}</b></div></body></html>`)
-
-    response.end();
 });
 
-server.listen(PORT);
+server.listen(PORT, () => {
+    console.log('server is running on port ' + PORT);
+});
